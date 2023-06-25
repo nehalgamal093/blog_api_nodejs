@@ -8,9 +8,7 @@ import { signInSchema,signUpSchema } from "./user.validation.js";
 
 export const signup = async (req,res)=>{
     const {name,email,password} = req.body;
-    let { error } = signUpSchema.validate(req.body,{abortEarly:false});
-   
-    if(!error){
+    
         let user = await userModel.findOne({email})
     if(user){
         res.json({message:'Email Already exists'})
@@ -21,17 +19,13 @@ export const signup = async (req,res)=>{
         })
       
     }
-    } else {
-
-        res.json(error)
-    }
+    
    
 }
 
 export const signin = async (req,res)=>{
     const {email,password} = req.body
-    let { error } = signInSchema.validate(req.body,{abortEarly:false});
-    if(!error){
+    
         let user = await userModel.findOne({email});
     if(user){
         let match =  await bcrypt.compare(password,user.password);
@@ -44,7 +38,5 @@ export const signin = async (req,res)=>{
     } else {
         res.json({message:'User not found'})
     }
-    } else {
-        res.json(error);
-    }
+    
 }
